@@ -1,0 +1,8 @@
+Aufgabe 2
+
+Answer: 
+
+Q1: A Algorithm can from Intersection-Object through Street-Object to neighboring 
+    Intersection-Object continue to move. And all TrafficNetwork can traverse.
+
+Q2: All Villages and Intersections are main components.

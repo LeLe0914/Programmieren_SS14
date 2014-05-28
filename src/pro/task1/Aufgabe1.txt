@@ -1,0 +1,38 @@
+Aufgabe 1
+
+Q1: Was müssen Sie alles ändern, wenn Sie von einem zwei- in ein drei- dimensionales 
+    Koordinatensystem wechseln?
+    
+    Answer: we can only edit Point.java as follow, and other java-Files don't need to change.
+    class Point {
+    /**
+     * The constructor with parameter x-axis and y-axis, z-axis
+     * @param x x-axis
+     * @param y y-axis
+     * @param z z-axis
+     */
+    public Point(double x, double y, double z) {
+       this.x = x;
+       this.y = y;
+       this.z = z;
+    }
+    
+    /**
+     *  two dimensional Vector, x-axis and y-axis, z-axis
+     */
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    }
+    
+Q2: Welche Vorteile erkennen Sie am objekt-orientierten Program- mieren?
+
+    Answer: 
+    1. OOP provides a clear modular structure for programs which makes it 
+       good for defining abstract datatypes where implementation details 
+       are hidden and the unit has a clearly defined interface.
+    2. OOP makes it easy to maintain and modify existing code as new 
+       objects can be created with small differences to existing ones.
+    3. OOP provides a good framework for code libraries where supplied 
+       software components can be easily adapted and modified by the programmer. 
+       This is particularly useful for developing graphical user interfaces.
