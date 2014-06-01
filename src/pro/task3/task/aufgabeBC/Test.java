@@ -124,7 +124,7 @@ public class Test {
                 System.out.println("Illegal choose, please try again!");
             }
         }      
-        System.exit(1);
+        System.exit(0);
     }
     
     /**
