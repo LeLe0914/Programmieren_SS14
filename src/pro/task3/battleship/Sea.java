@@ -1,4 +1,4 @@
-package task.aufgabeA;
+package battleship;
 
 /**
  * A class model a play field (Sea) and include logic of this play

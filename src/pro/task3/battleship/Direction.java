@@ -1,4 +1,4 @@
-package task.aufgabeA;
+package battleship;
 public enum Direction {
     /**
      * The North Direction (where y decreases)

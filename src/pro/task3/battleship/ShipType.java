@@ -1,4 +1,4 @@
-package task.aufgabeA;
+package battleship;
 public enum ShipType {
     /**
      * The Minesweeper ship-type

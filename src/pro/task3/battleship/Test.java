@@ -1,14 +1,11 @@
-package task.aufgabeBC;
+package battleship;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import task.aufgabeA.Direction;
-import task.aufgabeA.Sea;
-import task.aufgabeA.ShipType;
-import task.aufgabeA.Sea.Coordinate;
+import battleship.Sea.Coordinate;
 
 /**
  * Test class for testing game
@@ -201,40 +198,48 @@ public class Test {
             && !this.sea.seaPosition[(x - 1) + (y - 1) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += (x - 1) + "," + (y - 1) + "|";
         }
+        
         // Scan North if detect a ship , add its coordinate to bombardSuggestion
         if ((y - 1) >= 0 && !this.sea.seaPosition[(x) + (y - 1) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += x + "," + (y - 1) + "|";
         }
+        
         // Scan North-East if detect a ship , add its coordinate to bombardSuggestion
         if ((x + 1) < sea.getWidth() 
             && (y - 1) >= 0 
             && !this.sea.seaPosition[(x + 1) + (y - 1) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += (x + 1) + "," + (y - 1) + "|";
         }
+        
         // Scan West if detect a ship , add its coordinate to bombardSuggestion
         if ((x - 1) >= 0 && !this.sea.seaPosition[(x - 1) + (y) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += (x - 1) + "," + y + "|";
         }
+        
         // Scan Center if detect a ship , add its coordinate to bombardSuggestion
         if (!this.sea.seaPosition[(x) + (y) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += x + "," + y + "|";
         }
+        
         // Scan East if detect a ship , add its coordinate to bombardSuggestion
         if ((x + 1) < sea.getWidth() 
             && !this.sea.seaPosition[(x + 1) + (y) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += (x + 1) + "," + y + "|";
         }
+        
         // Scan South-West if detect a ship , add its coordinate to bombardSuggestion
         if ((x - 1) >= 0 
             && (y + 1) < sea.getHeight() 
             && !this.sea.seaPosition[(x - 1) + (y + 1) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += (x - 1) + "," + (y + 1) + "|";
         }
+        
         // Scan South if detect a ship , add its coordinate to bombardSuggestion
         if ((y + 1) < sea.getHeight() 
             && !this.sea.seaPosition[(x) + (y + 1) * this.sea.getWidth()].getValue().equals(".")) {
             bombardSuggestion += x + "," + (y + 1) + "|";
         }
+        
         // Scan North if detect a ship , add its coordinate to bombardSuggestion
         if ((x + 1) < sea.getWidth() 
             && (y + 1) < sea.getHeight() 
