@@ -180,6 +180,7 @@ public class Test {
             }
             System.out.println();
         }
+        System.out.println();
     }
     
     /**
@@ -266,26 +267,16 @@ public class Test {
                 if (sea.bomb[x + y * sea.getWidth()].getValue().equals(".")) {
                     isDropBomb = sea.dropBomb(x, y);
                     count++;
-                    String str = "Number " + count 
-                            + " Bomb; Position [" + x + ", " + y + "]";
-                    if (isDropBomb == true) {
-                        str = str + "; This Bomb does not hit a ship !";
-                        System.out.println(str);
-                        this.printBombField();
-                    } else {
-                        str = str + "; This Bomb hits a ship !";
-                        System.out.println(str);
-                        this.printBombField();
-                    }  
+                    this.showInfo(count, isDropBomb, x, y);    
                 }
-                if (this.sea.allShipSunk()) {
+                if (this.sea.allShipsSunk()) {
                     System.out.println("All ships are sunk ! Good game!");
                     System.out.println("A output Text file is builded !");
                     this.outputResultTxt();
                     break;
                 }
             } else {
-                if (this.sea.allShipSunk()) {
+                if (this.sea.allShipsSunk()) {
                     System.out.println("All ships are sunk ! Good game!");
                     System.out.println("A output Text file is builded !");
                     this.outputResultTxt();
@@ -316,6 +307,7 @@ public class Test {
                 String[] detectPosition = bombardSuggestion.split("\\|");
                 int x = 0;
                 int y = 0;
+                boolean isDropBomb;
                 if (detectPosition.length == 1) {
                     System.out.println("Radar does not detect any ships in this distric !");
                     System.out.println();
@@ -327,24 +319,21 @@ public class Test {
                         x = Integer.parseInt(bombPosition[0]);
                         y = Integer.parseInt(bombPosition[1]);
                         if (sea.bomb[x + y * sea.getWidth()].getValue().equals(".")) {
-                            sea.dropBomb(x, y);
+                            isDropBomb = sea.dropBomb(x, y);
                             count++;
-                            String str = "Number " + count 
-                                    + " Bomb; Position [" + x + ", " + y + "]"
-                                    + "; This Bomb hits a ship";
-                            System.out.println(str);
+                            this.showInfo(count, isDropBomb, x, y);
                         } 
                     }
                     this.printBombField();
                 } 
-                if (this.sea.allShipSunk()) {
+                if (this.sea.allShipsSunk()) {
                     System.out.println("All ships are sunk ! Good game!");
                     System.out.println("A output Text file is builded !");
                     this.outputResultTxt();
                     break;
                 }     
             } else {
-                if (this.sea.allShipSunk()) {
+                if (this.sea.allShipsSunk()) {
                     System.out.println("All ships are sunk ! Good game!");
                     System.out.println("A output Text file is builded !");
                     this.outputResultTxt();
@@ -359,11 +348,34 @@ public class Test {
     }
     
     /**
+     * Show this point's information , if a bomb is dropping
+     * @param count the count of bomb   
+     * @param isDropBomb strike or not
+     * @param x x-axis
+     * @param y y-axis
+     */
+    public void showInfo(int count, boolean isDropBomb, int x, int y) {
+        String str = "Number " + count 
+                + " Bomb; Position [" + x + ", " + y + "]";
+        if (isDropBomb == true) {
+            str = str + "; This Bomb does hits a ship !";
+            System.out.println(str);
+            this.printBombField();
+        } else {
+            str = str + "; This Bomb does not hit a ship !";
+            System.out.println(str);
+            this.printBombField();
+        }  
+        
+    }
+    
+    /**
      * When this game over or all ship are sunk, the method should build a final report
      */
     public void outputResultTxt() {
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("TestOutPut.txt"));
+            
+            BufferedWriter out = new BufferedWriter(new FileWriter("TextOutput.txt"));
             String[] bombs = this.sea.toStringWithBombs().split(",");
             String[] ships = this.sea.toStringWithShips().split(",");
             int size = ships.length;
@@ -371,7 +383,7 @@ public class Test {
             out.newLine();
             out.write("GAME MODE : " + this.gameMode);
             out.newLine();
-            if (sea.allShipSunk()) {
+            if (sea.allShipsSunk()) {
                 out.write("Congratulations !! All ship are sunk !!");
                 out.newLine();
             }

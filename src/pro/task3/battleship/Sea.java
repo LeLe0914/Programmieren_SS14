@@ -85,7 +85,7 @@ public class Sea {
              */
             int count;
             switch (dir) {
-            case NORTH : if ((y - type.getLength()) >= 0) {
+            case NORTH : if ((y - type.getLength()) >= -1) {
                 count = 0;
                 for (int i = 0; i < type.getLength(); i++) {
                     if (seaPosition[x + (y - i) * height].getValue().equals(".")) {
@@ -101,7 +101,7 @@ public class Sea {
                 } 
             } break;
             
-            case WEST :  if ((x - type.getLength() >= 0)) {
+            case WEST :  if ((x - type.getLength() >= -1)) {
                 count = 0;
                 for (int i = 0; i < type.getLength(); i++) {
                     if (seaPosition[(x - i) + y * height].getValue().equals(".")) {
@@ -164,10 +164,10 @@ public class Sea {
     public boolean dropBomb(int x, int y) {
         if (seaPosition[x + y * height].getValue().equals(".")) {
             bomb[x + y * height].setValue("O");
-            return true;
+            return false;
         } else {
             bomb[x + y * height].setValue("X");
-            return false;
+            return true;
         }   
     }
     
@@ -175,7 +175,7 @@ public class Sea {
      * If all ships are sunk, the method returns true, if not, returns false
      * @return false or true;
      */
-    public boolean allShipSunk() {
+    public boolean allShipsSunk() {
         int count1 = 0; // count how many ships' positions in sea field
         int count2 = 0; // count how many times bomb hits the ship;
         for (int x = 0; x < width; x++) {
