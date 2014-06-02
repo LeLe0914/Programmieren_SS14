@@ -267,7 +267,9 @@ public class Test {
                 if (sea.bomb[x + y * sea.getWidth()].getValue().equals(".")) {
                     isDropBomb = sea.dropBomb(x, y);
                     count++;
-                    this.showInfo(count, isDropBomb, x, y);    
+                    this.showInfo(count, isDropBomb, x, y);
+                    this.printBombField();
+                  
                 }
                 if (this.sea.allShipsSunk()) {
                     System.out.println("All ships are sunk ! Good game!");
@@ -360,11 +362,11 @@ public class Test {
         if (isDropBomb == true) {
             str = str + "; This Bomb does hits a ship !";
             System.out.println(str);
-            this.printBombField();
+            
         } else {
             str = str + "; This Bomb does not hit a ship !";
             System.out.println(str);
-            this.printBombField();
+            
         }  
         
     }
@@ -375,7 +377,7 @@ public class Test {
     public void outputResultTxt() {
         try {
             
-            BufferedWriter out = new BufferedWriter(new FileWriter("TextOutput.txt"));
+            BufferedWriter out = new BufferedWriter(new FileWriter("TestOutput"));
             String[] bombs = this.sea.toStringWithBombs().split(",");
             String[] ships = this.sea.toStringWithShips().split(",");
             int size = ships.length;
