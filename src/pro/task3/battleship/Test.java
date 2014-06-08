@@ -17,7 +17,7 @@ public class Test {
     /**
      * Initial a play field
      */
-    Sea sea = new Sea(10, 10);
+    private Sea sea = new Sea(10, 10);
     private Scanner scPosition;
     private Scanner scPress;
     private String gameMode = null;
@@ -36,7 +36,7 @@ public class Test {
      * 4 MINESWEEPER) 
      * @return false or true
      */
-    public boolean initialGame() {
+    private boolean initialGame() {
         int[] count = {0, 0, 0, 0};
         int total = 0;
         int x;
@@ -95,7 +95,7 @@ public class Test {
     /**
      * Starting Game, build game's menu and listening player enter instruction
      */
-    public void playGame() {
+    private void playGame() {
         System.out.println("Game initialing.......");
         this.initialGame(); 
         System.out.println("Game starting...........");
@@ -107,6 +107,7 @@ public class Test {
         while (true) {
             this.scPress = new Scanner(System.in);
             String input = this.scPress.next();
+           
             if (input.equals("1")) {
                 this.normalMode();
             }
@@ -128,7 +129,7 @@ public class Test {
      * Player can input a coordinate, which he wants to drop a bomb in here
      * @return Coordinate
      */
-    public Coordinate inputPosition() {
+    private Coordinate inputPosition() {
         int x = 0;
         int y = 0;
         String[] str;
@@ -172,7 +173,7 @@ public class Test {
     /**
      * Print Bomb field, player can see which field he hits a ship or not
      */
-    public void printBombField() {
+    private void printBombField() {
 
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
@@ -189,7 +190,7 @@ public class Test {
      * @param position center point
      * @return bombard suggestion
      */
-    public String radar(Coordinate position) {
+    private String radar(Coordinate position) {
         String bombardSuggestion = "Position|";
         int x = position.getX();
         int y = position.getY();
@@ -253,7 +254,7 @@ public class Test {
     /**
      * Normal Mode, without radar.... drop bomb one by one
      */
-    public void normalMode() {
+    private void normalMode() {
         boolean isDropBomb;
         int count = 0;
         gameMode = "Normal Mode";
@@ -296,7 +297,7 @@ public class Test {
     /**
      * Intelligence Mode.... with radar. Player can easy win game with radar's help
      */
-    public void intelligenceMode() {
+    private void intelligenceMode() {
         int count = 0; 
         gameMode = "Intelligence Mode";
         System.out.println("----------- INTELLIGENCE MODE -----------");
@@ -356,7 +357,7 @@ public class Test {
      * @param x x-axis
      * @param y y-axis
      */
-    public void showInfo(int count, boolean isDropBomb, int x, int y) {
+    private void showInfo(int count, boolean isDropBomb, int x, int y) {
         String str = "Number " + count 
                 + " Bomb; Position [" + x + ", " + y + "]";
         if (isDropBomb == true) {
@@ -374,12 +375,12 @@ public class Test {
     /**
      * When this game over or all ship are sunk, the method should build a final report
      */
-    public void outputResultTxt() {
+    private void outputResultTxt() {
         try {
             
             BufferedWriter out = new BufferedWriter(new FileWriter("TestOutput"));
-            String[] bombs = this.sea.toStringWithBombs().split(",");
-            String[] ships = this.sea.toStringWithShips().split(",");
+            String[] bombs = this.sea.toStringWithBombs().split("\n");
+            String[] ships = this.sea.toStringWithShips().split("\n");
             int size = ships.length;
             out.write(">>>>>>>>>>>>>>>>> Output Game's Result <<<<<<<<<<<<<<<<<<<<<");
             out.newLine();

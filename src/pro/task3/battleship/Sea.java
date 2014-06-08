@@ -206,12 +206,12 @@ public class Sea {
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 if ((x + y * this.height) == 0) {
-                    stringWithShips = seaPosition[x + y * this.height].getValue() + " ";
+                    stringWithShips = seaPosition[x + y * this.height].getValue();
                 } else {
-                    stringWithShips += seaPosition[x + y * this.height].getValue() + " ";
+                    stringWithShips += seaPosition[x + y * this.height].getValue();
                 }
             }
-            stringWithShips += ",";
+            stringWithShips += "\n";
         }
         return stringWithShips;
         
@@ -226,12 +226,12 @@ public class Sea {
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 if ((x + y * this.height) == 0) {
-                    stringWithBombs = bomb[x + y * this.height].getValue() + " ";
+                    stringWithBombs = bomb[x + y * this.height].getValue();
                 } else {
-                    stringWithBombs += bomb[x + y * this.height].getValue() + " ";
+                    stringWithBombs += bomb[x + y * this.height].getValue();
                 }
             }
-            stringWithBombs += ",";
+            stringWithBombs += "\n";
         }
         return stringWithBombs;
     }
