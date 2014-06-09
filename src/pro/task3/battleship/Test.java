@@ -377,8 +377,8 @@ public class Test {
      */
     private void outputResultTxt() {
         try {
-            
-            BufferedWriter out = new BufferedWriter(new FileWriter("TestOutput"));
+            String path = this.getClass().getResource("").getPath() + "/TestOutput.txt";
+            BufferedWriter out = new BufferedWriter(new FileWriter(path));
             String[] bombs = this.sea.toStringWithBombs().split("\n");
             String[] ships = this.sea.toStringWithShips().split("\n");
             int size = ships.length;
