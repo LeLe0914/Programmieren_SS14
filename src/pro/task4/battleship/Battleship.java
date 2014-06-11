@@ -1,5 +1,8 @@
 package battleship;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 import battleship.Player.PlayerID;
@@ -14,17 +17,17 @@ public class Battleship {
     /**
      * Border's value should be in Interval [7,10]
      */
-    public static final int BORDER_MIN = 7;
-    public static final int BORDER_MAX = 10;
+    private static final int BORDER_MIN = 7;
+    private static final int BORDER_MAX = 10;
     
-    Player player1;
-    Player player2;
-    Player currentPlayer;
+    private Player player1;
+    private Player player2;
+    private Player currentPlayer;
     
-    public int width;
-    public int height;
+    private int width;
+    private int height;
     
-    Scanner typing;
+    private Scanner typing;
     
     /**
      * Battleship's Constructor
@@ -62,7 +65,7 @@ public class Battleship {
      * @param height border's height
      * @return true or false
      */
-    public static boolean isBorderLegal(int width, int height) {
+    private static boolean isBorderLegal(int width, int height) {
         if (width <= BORDER_MAX && width >= BORDER_MIN 
             && height >= BORDER_MIN && height <= BORDER_MAX) {
             return true;
@@ -74,8 +77,24 @@ public class Battleship {
     /**
      * Starting Game, build game's menu and listening player enter instruction
      */
-    public void playGame() {
+    private void playGame() {
+        System.out.println("---------------- INITIAL GAME -----------------");
         this.initialGame();
+        System.out.println("---------------- END INITIAL GAME -----------------");
+        
+        System.out.println("\n---------------- START PLAY GAME -----------------");
+        this.dropBomb();
+        System.out.println("---------------- END PLAY GAME -----------------");
+        
+        System.out.println("\n---------------- OUTPUT RESULT -----------------");
+        System.out.println("Winner is Player " + currentPlayer.getId());
+        System.out.println("\n---------------- PLAYER ONE -----------------");
+        this.printBombField(player1);
+        System.out.println("\n---------------- PLAYER TWO -----------------");
+        this.printBombField(player2);
+        
+        System.out.println("GAME OVER \n  A output Text file is builded !");
+        this.outputResultTxt();
     }
     
     
@@ -83,9 +102,8 @@ public class Battleship {
      * Initial game... Player 1 and Player 2 add 10 ships 
      * (includes 1 FLATTOP, 2 DREADNOUGHT, 3 BATTLECRUISER, 4 MINESWEEPER) 
      */
-    public void initialGame() {
+    private void initialGame() {
         int i = 0; // count for player, "0" is player 1 and "1" is player 2 
-        System.out.println("---------------- INITIAL GAME -----------------");
         while (i < 2) {
             // Show which player puts ships
             if (i == 0) {
@@ -94,8 +112,7 @@ public class Battleship {
                     System.out.println("\nPlayer 1 has completed the putting ships \n"
                                      + "*******************************************\n");
                     i++;
-                }
-                
+                }   
             } else {
                 currentPlayer = player2;
                 if(this.putShips()) {
@@ -106,10 +123,13 @@ public class Battleship {
             }
             
         }
-        System.out.println("---------------- END INITIAL GAME -----------------");
     }
     
-    public boolean putShips() {
+    /**
+     * Put ships 
+     * @return
+     */
+    private boolean putShips() {
         boolean result = false;
         // count ships and direction,which player wants to put
         int shipCount = 0;
@@ -161,10 +181,10 @@ public class Battleship {
             while (true) {
                 typing = new Scanner(System.in);
                 String input = typing.nextLine().toUpperCase();
-                if (this.checkFormat(input).equals("true")) {
+                if (DataTools.checkInitialFormat(input, width, height).equals("true")) {
                     String[] format = input.split(" ");
-                    coordinate = this.convertToCoordinate(format[0]);
-                    dir = this.convertToDirection(format[1]);
+                    coordinate = DataTools.convertToCoordinate(format[0]);
+                    dir = DataTools.convertToDirection(format[1]);
                     if (format.length == 3) {
                         currentPlayer.getSea().initialPlayField(this.width, this.height);;
                         shipCount = 0;
@@ -178,7 +198,7 @@ public class Battleship {
                         System.out.println("Error : this position is illegal, please try again !");
                     }
                 } else {
-                    System.out.println(this.checkFormat(input));
+                    System.out.println(DataTools.checkInitialFormat(input, width, height));
                 }
             }
             
@@ -190,91 +210,106 @@ public class Battleship {
         return result;
     }
     
-    /**
-     * Check the format is if legal or not
-     */
-    public String checkFormat(String args) {
+    private void dropBomb() {
+        int[] coordinate;
+        int x;
+        int y;
+        Player enemy = player2;
+        currentPlayer = player1;
         
-        String result = "true";
-        String showMsg = "Error : ";
-        String[] subStr = args.split(" ");
-        /* 
-         * Check the args' length should be 4 or 10 (with "reset")
-         */
-        if (args.length() != 4 && args.length() != 10) {
-            showMsg += "expected: input length is 4 or 10 (with \"reset\") but was " + args.length();
-            return showMsg;
-        }
-        
-        /*
-         * Check the subStr's length should be 2 or 3 (with "reset")
-         */ 
-        if (subStr.length != 2 && subStr.length !=3) {
-            showMsg += "expected: 2 or 3 parameters but was " + subStr.length + "parameters";
-            return showMsg;
-        }
-        
-        /*
-         *  Check subStr[0] (coordinate's value if legal or not)
-         */
-        char[] xy = new char[2];
-        // Check the subStr[0]'s length ,should be 2;
-        if (subStr[0].length() != 2) {
-            showMsg += "expected: 2 values in coordinate but was " + subStr[0].length() + " values in it";
-            return showMsg;
-        } 
-        xy = subStr[0].toCharArray();
-        int x = xy[0] - 65; // 'A' to int is 65;
-        int y = Integer.parseInt(Character.toString(xy[1]));
-        if (x < 0 || x >= this.width || y < 0 && y >= this.height) {
-            showMsg += "expected: coordinate (x,y) in battle field but was out of the field";
-            return showMsg;
-        }
-        
-        /*
-         * Check subStr[1] ( direction's value if legal or not)
-         */
-        String dir = subStr[1];
-        if (!dir.equals("N") && !dir.equals("S") && !dir.equals("O") && !dir.equals("W")) {
-            showMsg += "expected: direction is N, O, S and W but was " + dir;
-            return showMsg;
-        }
-        
-        /*
-         * Check subStr[2] ( reset instruction)
-         */
-        if (subStr.length == 3) {
-            if (!subStr[2].equals("RESET")) {
-                showMsg += "expected: reset instruction is RESET but was " + subStr[2];
-                return showMsg;
+        System.out.println("Tips : The format of throwing Bomb has two formats \n"
+                         + "       1. \"D4\" represents coordinate. \n"
+                         + "       2. \"D4 PRINT\", if you want to see bombing's result. \n");    
+        while (!enemy.getSea().allShipsSunk(currentPlayer)) {
+            System.out.println("Player " + currentPlayer.getId() + " starts to throw bomb !");
+            typing = new Scanner(System.in);
+            String input = typing.nextLine().toUpperCase();
+            if (DataTools.checkPlayFormat(input) == "true") {
+                String[] format = input.split(" ");
+                coordinate = DataTools.convertToCoordinate(format[0]);
+                x = coordinate[0];
+                y = coordinate[1];
+                if (!currentPlayer.getSea().isBombed(x, y)) {
+                    if (enemy.getSea().dropBomb(currentPlayer.getSea(), x, y)) {
+                        System.out.println("Treffer \n");
+                        if (format.length == 2) {
+                            this.printBombField(currentPlayer);
+                        } 
+                    } else {
+                        System.out.println("Wasser \n");
+                        if (format.length == 2) {
+                            this.printBombField(currentPlayer);
+                        }
+                        
+                        if (currentPlayer.getId().equals(PlayerID.ONE)) {
+                            currentPlayer = player2;
+                            enemy = player1;
+                        } else {
+                            currentPlayer = player1;
+                            enemy = player2;
+                        }
+                    }     
+                } else {
+                    System.out.println("Error : this position is bombed, please try again !");
+                }
+                
+                
+            } else {
+                System.out.println(DataTools.checkPlayFormat(input));
             }
         }
-        return result;
     }
-    
+
     /**
-     * Convert to coordinate
+     * Print Bomb field, player can see which field he hits a ship or not
      */
-    public int[] convertToCoordinate(String args) {
-        int[] coordinate = new int[2];
-        char[] xy = args.toCharArray();
-        coordinate[0] = xy[0] - 65;
-        coordinate[1] = Integer.parseInt(Character.toString(xy[1]));
-        return coordinate;
-    }
-    
-    /**
-     * Convert to direction
-     */
-    public Direction convertToDirection(String args) {
-        Direction dir = null;
-        switch(args) {
-        case "O" : dir = Direction.EAST; break;
-        case "S" : dir = Direction.SOUTH; break;
-        case "N" : dir = Direction.NORTH; break;
-        case "W" : dir = Direction.WEST; break;
-        default : break;
+    private void printBombField(Player player) {
+        Player currentPlayer = player;
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                System.out.print(player.getSea().bomb[x + y * currentPlayer.getSea().getHeight()].getValue() + " ");
+            }
+            System.out.println();
         }
-        return dir;
+        System.out.println();
+    }
+    
+    
+    
+    /**
+     * When this game over or all ship are sunk, the method should build a final report
+     */
+    private void outputResultTxt() {
+        try {
+            String path = this.getClass().getResource("").getPath() + "/TestOutput.txt";
+            BufferedWriter out = new BufferedWriter(new FileWriter(path));
+            String[] bombs1 = player1.getSea().toStringWithBombs().split("\n");
+            String[] ships1 = player1.getSea().toStringWithShips().split("\n");
+            String[] bombs2 = player2.getSea().toStringWithBombs().split("\n");
+            String[] ships2 = player2.getSea().toStringWithShips().split("\n");
+            int size = bombs1.length;
+            out.write(">>>>>>>>>>>>>>>>> Output Game's Result <<<<<<<<<<<<<<<<<<<<<");
+            out.newLine();
+            out.write("Winner is Player " + currentPlayer.getId());
+            out.newLine();
+            out.write("--------------------------------------------------------");
+            out.newLine();
+            out.write("Player 1 :");
+            for (int i = 0; i < size; i++) {
+                out.write(ships1[i] + "        ***        " + bombs1[i]);
+                out.newLine();
+            }
+            out.write("--------------------------------------------------------");
+            out.newLine();
+            out.write("Player 2 :");
+            for (int i = 0; i < size; i++) {
+                out.write(ships2[i] + "        ***        " + bombs2[i]);
+                out.newLine();
+            }
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
+

@@ -161,12 +161,23 @@ public class Sea {
      * @param y coordinate y-axis
      * @return false or true
      */
-    public boolean dropBomb(int x, int y) {
+    public boolean dropBomb(Sea sea, int x, int y) {
         if (seaPosition[x + y * height].getValue().equals(".")) {
-            bomb[x + y * height].setValue("O");
+            sea.bomb[x + y * height].setValue("O");
             return false;
         } else {
-            bomb[x + y * height].setValue("X");
+            sea.bomb[x + y * height].setValue("X");
+            return true;
+        }   
+    }
+    
+    /**
+     * 
+     */
+    public boolean isBombed(int x, int y) {
+        if (bomb[x + y * height].getValue().equals(".")) {
+            return false;
+        } else {
             return true;
         }   
     }
@@ -175,14 +186,14 @@ public class Sea {
      * If all ships are sunk, the method returns true, if not, returns false
      * @return false or true;
      */
-    public boolean allShipsSunk() {
+    public boolean allShipsSunk(Player player) {
         int count1 = 0; // count how many ships' positions in sea field
         int count2 = 0; // count how many times bomb hits the ship;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (!seaPosition[x + y * height].getValue().equals(".")) {
                     count1++;
-                    if (bomb[x + y * height].getValue().equals("X")) {
+                    if (player.getSea().bomb[x + y * height].getValue().equals("X")) {
                         count2++;
                     }
                 }
