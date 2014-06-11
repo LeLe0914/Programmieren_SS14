@@ -1,4 +1,6 @@
-package battleship;
+package battleship_ub4;
+
+import battleship.Sea;
 
 public class Player {
     

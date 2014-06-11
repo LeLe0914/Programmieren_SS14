@@ -5,7 +5,7 @@ package battleship;
  * @author Le Wang
  * @version 1.0
  */
-public class Sea {
+public class Sea implements Cloneable {
     /**
      * Limit the sea size
      */
@@ -161,18 +161,21 @@ public class Sea {
      * @param y coordinate y-axis
      * @return false or true
      */
-    public boolean dropBomb(Sea sea, int x, int y) {
+    public boolean dropBomb(int x, int y) {
         if (seaPosition[x + y * height].getValue().equals(".")) {
-            sea.bomb[x + y * height].setValue("O");
+            bomb[x + y * height].setValue("O");
             return false;
         } else {
-            sea.bomb[x + y * height].setValue("X");
+            bomb[x + y * height].setValue("X");
             return true;
         }   
     }
     
     /**
-     * 
+     * Check this position is bombed or not
+     * @param x x-axis
+     * @param y y-axis
+     * @return boolean Value
      */
     public boolean isBombed(int x, int y) {
         if (bomb[x + y * height].getValue().equals(".")) {
@@ -186,14 +189,14 @@ public class Sea {
      * If all ships are sunk, the method returns true, if not, returns false
      * @return false or true;
      */
-    public boolean allShipsSunk(Player player) {
+    public boolean allShipsSunk() {
         int count1 = 0; // count how many ships' positions in sea field
         int count2 = 0; // count how many times bomb hits the ship;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 if (!seaPosition[x + y * height].getValue().equals(".")) {
                     count1++;
-                    if (player.getSea().bomb[x + y * height].getValue().equals("X")) {
+                    if (bomb[x + y * height].getValue().equals("X")) {
                         count2++;
                     }
                 }
@@ -261,7 +264,7 @@ public class Sea {
     public int getHeight() {
         return this.height;
     }
-    
+
    /**
     * This class represent a coordinate system.
     * Save end of ship's coordinate

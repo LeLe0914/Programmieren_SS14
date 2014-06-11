@@ -4,7 +4,7 @@
   <local-check-config name="assignment2-checkstyle" location="http://baldur.iti.kit.edu/programmieren/assignments/assignment02-checkstyle.xml" type="remote" description="">
     <additional-data name="cache-file" value="false"/>
   </local-check-config>
-  <fileset name="all" enabled="true" check-config-name="assignment3-checkstyle" local="false">
+  <fileset name="all" enabled="true" check-config-name="assignment4-checkstyle" local="false">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>
