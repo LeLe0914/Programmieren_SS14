@@ -1,11 +1,29 @@
-package battleship_ub4;
+package task.battleship;
 
 import battleship.Direction;
 
-public class DataTools {
+/**
+ * This class is responsible for processing input's data and convert from String to coordinate 
+ * and direction
+ * @author Le Wang
+ * @version 1.0
+ */
+public final class DataTools {
+    
+    /** 
+     * Private constructor to avoid object generation. 
+     */
+    private DataTools() {
+        
+    }
     
     /**
+     *
      * Check the initial format is if legal or not
+     * @param args input String
+     * @param width battle field's width
+     * @param height battle field's height
+     * @return if occur Error , return error message
      */
     public static String checkInitialFormat(String args, int width, int height) {
         String[] subStr = args.split(" ");
@@ -21,7 +39,7 @@ public class DataTools {
         /*
          * Check the subStr's length should be 2 or 1 (this is a instruction "reset" or "undo" or "quit")
          */ 
-        if (subStr.length != 2 && subStr.length !=1) {
+        if (subStr.length != 2 && subStr.length != 1) {
             showMsg += "expected: 1 or 2 parameters but was " + subStr.length + " parameters";
             return showMsg;
         }
@@ -68,6 +86,8 @@ public class DataTools {
 
     /**
      * Check the throw bomb's format is if legal or not
+     * @param args input String
+     * @return if occur Error , return error message
      */
     public static String checkPlayFormat(String args) {
         String str = args;
@@ -98,6 +118,8 @@ public class DataTools {
 
     /**
      * Convert to coordinate
+     * @param args input coordinate's String
+     * @return convert to integer
      */
     public static int[] convertToCoordinate(String args) {
         int[] coordinate = new int[2];
@@ -109,6 +131,8 @@ public class DataTools {
     
     /**
      * Convert to direction
+     * @param args input direction's String
+     * @return convert to Direction
      */
     public static Direction convertToDirection(String args) {
         Direction dir = null;

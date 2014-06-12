@@ -1,13 +1,13 @@
-package battleship_ub4;
+package task.battleship;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import task.battleship.Player.PlayerID;
 import battleship.Direction;
 import battleship.Sea;
 import battleship.ShipType;
-import battleship_ub4.Player.PlayerID;
 
 /**
  * The class represents a Battleship
@@ -54,7 +54,6 @@ public final class Battleship {
      * Main - Method
      * @param args commander line arguments for setting width and height
      * @throws IOException 
-     * @throws CloneNotSupportedException 
      */
     public static void main(String[] args) throws IOException {
         Battleship battelship = new Battleship(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
@@ -145,11 +144,8 @@ public final class Battleship {
         ShipType type = null;
         Direction dir;
         int[] coordinate;
-        
-        // Input tips and isAdd
+        // Input tips
         String maxX = Character.toString((char) (this.width + 65 - 1));
-        boolean isAdd = false;
-        
         // Some tips
         System.out.print("Tips:  Format of Position likes this \"D4 N\" \n"
                          + "       - D4 represents coordinate, D is column and 4 is row \n"
@@ -167,37 +163,32 @@ public final class Battleship {
             if (shipCount == 0) {
                 //Terminal.printLine("Please input a coordinate for putting a FLattop :");
                 type = ShipType.FLATTOP;
-            }
-            
+            } 
             // 2. Set type is DREADNOUGHT
             if (shipCount < 3 && shipCount > 0) {
                 //Terminal.printLine("Please input a coordinate for putting a DREADNOUGHT :");
                 type = ShipType.DREADNOUGHT;
             }
-            
             // 3. Set type is BATTLECRUISER
             if (shipCount < 6 && shipCount >= 3) {
                 //Terminal.printLine("Please input a coordinate for putting a BATTLECRUISER :");
                 type = ShipType.BATTLECRUISER;
             }
-            
             // 4. Set type is MINESWEEPER
             if (shipCount < 10 && shipCount >= 6) {
               //Terminal.printLine("Please input a coordinate for putting a MINESWEEPER :");
                 type = ShipType.MINESWEEPER;
             }
-            
+            // input coordinate or instruction
             while (true) {
                 typing = Terminal.readLine();
                 String input = typing.toUpperCase();
-                
                 if (DataTools.checkInitialFormat(input, width, height).equals("true")) {
                     String[] format = input.split(" ");
                     if (format.length == 2) {
                         coordinate = DataTools.convertToCoordinate(format[0]);
                         dir = DataTools.convertToDirection(format[1]);
-                        isAdd = currentPlayer.getSea().addShip(type, dir, coordinate[0], coordinate[1]);
-                        if (isAdd == true) {
+                        if (currentPlayer.getSea().addShip(type, dir, coordinate[0], coordinate[1])) {
                             Terminal.printLine("Player " + currentPlayer.getId() + " puts " + type);
                             shipCount++;
                             break;
@@ -205,26 +196,21 @@ public final class Battleship {
                             Terminal.printLine("Error : this position is illegal, please try again !");
                         }
                     }
-                    
                     if (format.length == 1) {
                         if (format[0].equals("RESET")) {
                             currentPlayer.getSea().initialPlayField(this.width, this.height);
                             shipCount = 0;
                             break;
                         }
-                        
                         if (format[0].equals("QUIT")) {
                             Terminal.printLine("Game Quit");
                             System.exit(0);
                         }
-                    }
-                    
+                    }  
                 } else {
                     Terminal.printLine(DataTools.checkInitialFormat(input, width, height));
                 }
-            }
-            
-            
+            }   
         }
         if (shipCount == 10) {
             result = true;
@@ -248,7 +234,7 @@ public final class Battleship {
             String input = typing.toUpperCase();
             if (DataTools.checkPlayFormat(input) == "true") {
                 // input coordinate
-                if(input.length() == 2) {
+                if (input.length() == 2) {
                     coordinate = DataTools.convertToCoordinate(input);
                     x = coordinate[0];
                     y = coordinate[1];
@@ -271,11 +257,11 @@ public final class Battleship {
                 }
                 
                 // input instructions
-                if(input.length() == 5) {
+                if (input.length() == 5) {
                     this.printBombField(enemy);
                 }
                 
-                if(input.length() == 4) {
+                if (input.length() == 4) {
                     Terminal.printLine("Game Quit");
                     System.exit(0);
                 }

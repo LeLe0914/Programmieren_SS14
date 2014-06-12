@@ -1,4 +1,4 @@
-package battleship_ub4;
+package task.battleship;
 
 import java.io.BufferedReader;
 import java.io.IOException;
