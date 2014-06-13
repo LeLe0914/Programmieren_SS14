@@ -158,7 +158,7 @@ public final class Battleship {
                          + "       MAX_Y-AXIS IS " + (this.height - 1) + "\n\n");
         // Core Part - Put ships
         Terminal.printLine("Player " + currentPlayer.getId() + " starts to putting ships :");
-        while (shipCount < 10) {
+        while (shipCount < 3) {
             // 1. Set type is FLATTOP
             if (shipCount == 0) {
                 //Terminal.printLine("Please input a coordinate for putting a FLattop :");
@@ -198,7 +198,7 @@ public final class Battleship {
                     }
                     if (format.length == 1) {
                         if (format[0].equals("RESET")) {
-                            currentPlayer.getSea().initialPlayField(this.width, this.height);
+                            currentPlayer.setSea(new Sea(this.width, this.height));;
                             shipCount = 0;
                             break;
                         }
@@ -212,7 +212,7 @@ public final class Battleship {
                 }
             }   
         }
-        if (shipCount == 10) {
+        if (shipCount == 3) {
             result = true;
         }
         return result;
@@ -238,24 +238,19 @@ public final class Battleship {
                     coordinate = DataTools.convertToCoordinate(input);
                     x = coordinate[0];
                     y = coordinate[1];
-                    if (enemy.getSea().bomb[x + y * height].getValue().equals(".")) {
-                        if (enemy.getSea().dropBomb(x, y)) {
-                            Terminal.printLine("Treffer \n");
-                        } else {
-                            Terminal.printLine("Wasser \n");
-                            if (currentPlayer.getId().equals(PlayerID.ONE)) {
-                                currentPlayer = player2;
-                                enemy = player1;
-                            } else {
-                                currentPlayer = player1;
-                                enemy = player2;
-                            }
-                        }     
+                    if (enemy.getSea().dropBomb(x, y)) {
+                        Terminal.printLine("Treffer \n");
                     } else {
-                        Terminal.printLine("Error : this position is bombed, please try again !");
-                    }
+                        Terminal.printLine("Wasser \n");
+                        if (currentPlayer.getId().equals(PlayerID.ONE)) {
+                             currentPlayer = player2;
+                             enemy = player1;
+                        } else {
+                             currentPlayer = player1;
+                             enemy = player2;
+                        }
+                    }     
                 }
-                
                 // input instructions
                 if (input.length() == 5) {
                     this.printBombField(enemy);
