@@ -1,6 +1,5 @@
-package task.battleship;
+package battleship;
 
-import battleship.Sea;
 
 /**
  * The class represents 
@@ -14,11 +13,11 @@ public class Player {
     
     /**
      * Constructor of Player
-     * @param id play's id
+     * @param one play's id
      * @param sea battle field
      */
-    public Player(PlayerID id, Sea sea) {
-        this.setId(id);
+    public Player(PlayerID one, Sea sea) {
+        this.setId(one);
         this.setSea(sea);
     }
     
@@ -52,23 +51,6 @@ public class Player {
      */
     public void setId(PlayerID id) {
         this.id = id;
-    }
-
-    /**
-     * The enum PlayID
-     * @author Le Wang
-     * @version 1.0
-     */
-    public enum PlayerID {
-        /**
-         * Player1 is PlayerID.ONE
-         */
-        ONE,
-        
-        /**
-         * Player 2 is PlayerID.TWO
-         */
-        TWO;
     }
 
 }

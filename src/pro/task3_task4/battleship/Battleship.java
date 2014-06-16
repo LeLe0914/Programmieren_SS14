@@ -1,14 +1,6 @@
-package task.battleship;
+package battleship;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import task.battleship.Player.PlayerID;
-import battleship.Direction;
-import battleship.Sea;
-import battleship.ShipType;
-
+import edu.kit.informatik.Terminal;
 /**
  * The class represents a Battleship
  * @author Le Wang
@@ -52,10 +44,10 @@ public final class Battleship {
     
     /**
      * Main - Method
-     * @param args commander line arguments for setting width and height
-     * @throws IOException 
+     * @param args a parameter for main method and use it to set width and height
+     * @throws java.io.IOException throws a IO Exception
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws java.io.IOException {
         Battleship battelship = new Battleship(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
         battelship.playGame();     
     }
@@ -81,7 +73,7 @@ public final class Battleship {
      * @throws IOException 
      * @throws CloneNotSupportedException 
      */
-    private void playGame() throws IOException {
+    private void playGame() throws java.io.IOException {
         Terminal.printLine("---------------- INITIAL GAME -----------------");
         this.initialGame();
         Terminal.printLine("---------------- END INITIAL GAME -----------------");
@@ -97,8 +89,7 @@ public final class Battleship {
         Terminal.printLine("\n---------------- PLAYER TWO -----------------");
         this.printBombField(player1);
         
-        Terminal.printLine("GAME OVER \n  A output Text file is builded !");
-        this.outputResultTxt();
+        Terminal.printLine("GAME OVER \n  Thank you for playing game !");
     }
     
     
@@ -108,7 +99,7 @@ public final class Battleship {
      * @throws IOException 
      * @throws CloneNotSupportedException 
      */
-    private void initialGame() throws IOException {
+    private void initialGame() throws java.io.IOException {
         int i = 0; // count for player, "0" is player 1 and "1" is player 2 
         while (i < 2) {
             // Show which player puts ships
@@ -137,7 +128,7 @@ public final class Battleship {
      * @throws IOException 
      * @throws CloneNotSupportedException 
      */
-    private boolean putShips() throws IOException {
+    private boolean putShips() throws java.io.IOException {
         boolean result = false;
         // count ships and direction,which player wants to put
         int shipCount = 0;
@@ -158,27 +149,8 @@ public final class Battleship {
                          + "       MAX_Y-AXIS IS " + (this.height - 1) + "\n\n");
         // Core Part - Put ships
         Terminal.printLine("Player " + currentPlayer.getId() + " starts to putting ships :");
-        while (shipCount < 3) {
-            // 1. Set type is FLATTOP
-            if (shipCount == 0) {
-                //Terminal.printLine("Please input a coordinate for putting a FLattop :");
-                type = ShipType.FLATTOP;
-            } 
-            // 2. Set type is DREADNOUGHT
-            if (shipCount < 3 && shipCount > 0) {
-                //Terminal.printLine("Please input a coordinate for putting a DREADNOUGHT :");
-                type = ShipType.DREADNOUGHT;
-            }
-            // 3. Set type is BATTLECRUISER
-            if (shipCount < 6 && shipCount >= 3) {
-                //Terminal.printLine("Please input a coordinate for putting a BATTLECRUISER :");
-                type = ShipType.BATTLECRUISER;
-            }
-            // 4. Set type is MINESWEEPER
-            if (shipCount < 10 && shipCount >= 6) {
-              //Terminal.printLine("Please input a coordinate for putting a MINESWEEPER :");
-                type = ShipType.MINESWEEPER;
-            }
+        while (shipCount < 10) {
+            type = setShipType(shipCount);
             // input coordinate or instruction
             while (true) {
                 typing = Terminal.readLine();
@@ -198,7 +170,7 @@ public final class Battleship {
                     }
                     if (format.length == 1) {
                         if (format[0].equals("RESET")) {
-                            currentPlayer.setSea(new Sea(this.width, this.height));;
+                            currentPlayer.setSea(new Sea(this.width, this.height));
                             shipCount = 0;
                             break;
                         }
@@ -212,13 +184,13 @@ public final class Battleship {
                 }
             }   
         }
-        if (shipCount == 3) {
+        if (shipCount == 10) {
             result = true;
         }
         return result;
     }
     
-    private void dropBomb() throws IOException {
+    private void dropBomb() throws java.io.IOException {
         int[] coordinate;
         int x;
         int y;
@@ -271,50 +243,36 @@ public final class Battleship {
      */
     private void printBombField(Player player) {
         Player currentPlayer = player;
-        String[] result = currentPlayer.getSea().toStringWithBombs().split("\n");
-        for (int i = 0; i < result.length; i++) {
-            Terminal.printLine(result[i]);
-        }
+        String result = currentPlayer.getSea().toStringWithBombs();
+        Terminal.printLine(result);
     }
     
-    
-    
     /**
-     * When this game over or all ship are sunk, the method should build a final report
+     * Set ship types
      */
-    private void outputResultTxt() {
-        try {
-            String path = this.getClass().getResource("").getPath() + "/TestOutput.txt";
-            BufferedWriter out = new BufferedWriter(new FileWriter(path));
-            String[] bombs1 = player1.getSea().toStringWithBombs().split("\n");
-            String[] ships1 = player1.getSea().toStringWithShips().split("\n");
-            String[] bombs2 = player2.getSea().toStringWithBombs().split("\n");
-            String[] ships2 = player2.getSea().toStringWithShips().split("\n");
-            int size = bombs1.length;
-            out.write(">>>>>>>>>>>>>>>>> Output Game's Result <<<<<<<<<<<<<<<<<<<<<");
-            out.newLine();
-            out.write("Winner is Player " + currentPlayer.getId());
-            out.newLine();
-            out.write("--------------------------------------------------------");
-            out.newLine();
-            out.write("Player 1 :");
-            out.newLine();
-            for (int i = 0; i < size; i++) {
-                out.write(ships1[i] + "        ***        " + bombs2[i]);
-                out.newLine();
-            }
-            out.write("--------------------------------------------------------");
-            out.newLine();
-            out.write("Player 2 :");
-            out.newLine();
-            for (int i = 0; i < size; i++) {
-                out.write(ships2[i] + "        ***        " + bombs1[i]);
-                out.newLine();
-            }
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private ShipType setShipType(int shipCount) {
+        ShipType type = null;
+     // 1. Set type is FLATTOP
+        if (shipCount == 0) {
+            //Terminal.printLine("Please input a coordinate for putting a FLattop :");
+            type = ShipType.FLATTOP;
+        } 
+        // 2. Set type is DREADNOUGHT
+        if (shipCount < 3 && shipCount > 0) {
+            //Terminal.printLine("Please input a coordinate for putting a DREADNOUGHT :");
+            type = ShipType.DREADNOUGHT;
         }
+        // 3. Set type is BATTLECRUISER
+        if (shipCount < 6 && shipCount >= 3) {
+            //Terminal.printLine("Please input a coordinate for putting a BATTLECRUISER :");
+            type = ShipType.BATTLECRUISER;
+        }
+        // 4. Set type is MINESWEEPER
+        if (shipCount < 10 && shipCount >= 6) {
+          //Terminal.printLine("Please input a coordinate for putting a MINESWEEPER :");
+            type = ShipType.MINESWEEPER;
+        }
+        return type;
     }
 }
 

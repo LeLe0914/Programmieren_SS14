@@ -1,6 +1,5 @@
-package task.battleship;
+package battleship;
 
-import battleship.Direction;
 
 /**
  * This class is responsible for processing input's data and convert from String to coordinate 

@@ -1,4 +1,4 @@
-package task.battleship;
+package edu.kit.informatik;
 
 import java.io.BufferedReader;
 import java.io.IOException;
